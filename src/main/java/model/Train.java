@@ -7,51 +7,59 @@ public class Train {
     private String origin;
     private int numberOfWagons;
 
-    //TODO: add doc
+    /**
+     * Default constructor
+     *
+     * @param engine      Locomotive
+     * @param origin      String
+     * @param destination String
+     */
     public Train(Locomotive engine, String origin, String destination) {
         this.engine = engine;
         this.destination = destination;
         this.origin = origin;
     }
 
-    //TODO: add doc
     public Wagon getFirstWagon() {
         return this.firstWagon;
     }
 
-    //TODO: add doc
     public void setFirstWagon(Wagon firstWagon) {
         this.firstWagon = firstWagon;
     }
 
-    //TODO: add doc
+    /**
+     * Counts all attached wagons and saves result in this.
+     */
     public void resetNumberOfWagons() {
         this.numberOfWagons = this.firstWagon.countNextWagons(1);
     }
 
-    //TODO: add doc
     public int getNumberOfWagons() {
         return this.numberOfWagons;
     }
-
-
-    /* three helper methods that are usefull in other methods */
 
     public boolean hasNoWagons() {
         return (this.firstWagon == null);
     }
 
-    //TODO: add doc
+    //Used 'getClass()' to check class.
     public boolean isPassengerTrain() {
         return firstWagon instanceof PassengerWagon;
     }
 
-    //TODO: add doc
+    //Used 'getClass()' to check class.
     public boolean isFreightTrain() {
         return firstWagon instanceof FreightWagon;
     }
 
-    //TODO: add doc
+    /**
+     * Returns position of a wagon.
+     * Will return -1 if wagon cannot be found.
+     *
+     * @param wagonId int
+     * @return int
+     */
     public int getPositionOfWagon(int wagonId) {
         // find a wagon on a train by id, return the position (first wagon had position 1)
         // if not found, than return -1
@@ -76,11 +84,15 @@ public class Train {
         return -1;
     }
 
-    //TODO: add doc
+    /**
+     * Returns wagon on position x.
+     * Can be used with 'getPositionOfWagon'.
+     *
+     * @param position int
+     * @return Wagon
+     * @throws IndexOutOfBoundsException Exception
+     */
     public Wagon getWagonOnPosition(int position) throws IndexOutOfBoundsException {
-        /* find the wagon on a given position on the train
-         position of wagons start at 1 (firstWagon of train)
-         use exceptions to handle a position that does not exist */
         Wagon currentWagon;
         int currentPosition = 0;
         if (!this.hasNoWagons()) {
@@ -104,12 +116,17 @@ public class Train {
         } else {
             throw new IndexOutOfBoundsException("No wagons on train.");
         }
-
-
-        return null; //TODO: Does not look very clean.
+        return null; //Code never comes here.
     }
 
-    //TODO: add doc
+    /**
+     * Counts number of seats on the whole train.
+     * Sums all seats of al wagons.
+     * <p>
+     * Returns 0 when wagon is not passenger wagon.
+     *
+     * @return int
+     */
     public int getNumberOfSeats() {
         /* give the total number of seats on a passenger train
          for freight trains the result should be 0 */
@@ -127,7 +144,13 @@ public class Train {
         return numberOfSeats;
     }
 
-    //TODO: add doc
+    /**
+     * Returns the total weight of a freighter train.
+     * Sums max weight of all wagons.
+     *
+     * Returns 0 when train is passenger train.
+     * @return int
+     */
     public int getTotalMaxWeight() {
         /* give the total maximum weight of a freight train
          for passenger trains the result should be 0 */
