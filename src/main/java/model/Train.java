@@ -1,11 +1,33 @@
 package model;
 
-public class Train {
+import java.util.Iterator;
+
+/**
+ * Choo Choo ~!
+ */
+public class Train implements Iterable<Wagon> {
     private Locomotive engine;
     private Wagon firstWagon;
     private String destination;
     private String origin;
     private int numberOfWagons;
+
+    @Override
+    public Iterator<Wagon> iterator() {
+        return new Iterator<Wagon>() {
+            Wagon currentWagon = firstWagon;
+
+            @Override
+            public boolean hasNext() {
+                return currentWagon.hasNextWagon();
+            }
+
+            @Override
+            public Wagon next() {
+                return currentWagon = currentWagon.getNextWagon();
+            }
+        };
+    }
 
     /**
      * Default constructor
@@ -32,7 +54,12 @@ public class Train {
      * Counts all attached wagons and saves result in this.
      */
     public void resetNumberOfWagons() {
-        this.numberOfWagons = this.firstWagon.countNextWagons(1);
+        int counter = 1;
+        for (Iterator<Wagon> it = iterator(); it.hasNext(); ) {
+            it.next();
+            counter++;
+        }
+        this.numberOfWagons = counter;
     }
 
     public int getNumberOfWagons() {
@@ -61,8 +88,6 @@ public class Train {
      * @return int
      */
     public int getPositionOfWagon(int wagonId) {
-        // find a wagon on a train by id, return the position (first wagon had position 1)
-        // if not found, than return -1
         Wagon currentWagon;
         int currentPosition = 0;
         if (!this.hasNoWagons()) {
@@ -134,9 +159,11 @@ public class Train {
         if (this.firstWagon instanceof PassengerWagon) {
             PassengerWagon currentWagon = (PassengerWagon) this.firstWagon;
             numberOfSeats = currentWagon.getNumberOfSeats();
-            while (currentWagon.hasNextWagon()) {
+
+            //There are more ways to implement loop for iterator. This is one of them.
+            for (Wagon wagon : this) {
                 numberOfSeats += currentWagon.getNumberOfSeats();
-                currentWagon = (PassengerWagon) currentWagon.getNextWagon();
+                currentWagon = (PassengerWagon) wagon;
             }
         } else if (this.firstWagon instanceof FreightWagon) {
             return numberOfSeats;
@@ -147,13 +174,12 @@ public class Train {
     /**
      * Returns the total weight of a freighter train.
      * Sums max weight of all wagons.
-     *
+     * <p>
      * Returns 0 when train is passenger train.
+     *
      * @return int
      */
     public int getTotalMaxWeight() {
-        /* give the total maximum weight of a freight train
-         for passenger trains the result should be 0 */
         int maxWeigt = 0;
         if (this.firstWagon instanceof FreightWagon) {
             FreightWagon currentWagon = (FreightWagon) this.firstWagon;
