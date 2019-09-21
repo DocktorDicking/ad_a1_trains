@@ -1,7 +1,8 @@
 package model;
 
 public class Shunter {
-    private static final int falsy = -1;
+    //Some methods return -1 (false). Since we dont want any magic number this variable.
+    public static final int FALSY = -1;
 
     /**
      * Checks if wagon can be attached to the train. The wagon can only be attached tot the train if all wagons
@@ -81,7 +82,7 @@ public class Shunter {
             if (train.hasNoWagons()) {
                 train.setFirstWagon(wagon);
             } else {
-                Wagon currentWagon = train.getFirstWagon().getLastWagon();
+                Wagon currentWagon = train.getFirstWagon().getLastWagonAttached();
                 currentWagon.setNextWagon(wagon);
                 Wagon nextWagon = currentWagon.getNextWagon();
                 nextWagon.setPreviousWagon(currentWagon);
@@ -143,7 +144,7 @@ public class Shunter {
         if (train.hasNoWagons() || wagon == null) {
             return false;
         }
-        if (train.getPositionOfWagon(wagon.getWagonId()) != falsy) {
+        if (train.getPositionOfWagon(wagon.getWagonId()) != FALSY) {
             if (train.getPositionOfWagon(wagon.getWagonId()) == 1) {
                 train.setFirstWagon(null);
                 return true;
@@ -169,7 +170,7 @@ public class Shunter {
         if (train == null || train.hasNoWagons() || wagon == null) {
             return false;
         }
-        if (train.getPositionOfWagon(wagon.getWagonId()) != falsy) {
+        if (train.getPositionOfWagon(wagon.getWagonId()) != FALSY) {
             Wagon targetWagon = train.getWagonOnPosition(train.getPositionOfWagon(wagon.getWagonId()));
             Wagon targetNext = targetWagon.getNextWagon();
             Wagon targetPrevious = targetWagon.getPreviousWagon();
@@ -205,13 +206,13 @@ public class Shunter {
      */
     public static boolean moveAllFromTrain(Train from, Train to, Wagon wagon) {
         if (from != null && to != null && wagon != null) {
-            if (from.getPositionOfWagon(wagon.getWagonId()) != falsy) {
+            if (from.getPositionOfWagon(wagon.getWagonId()) != FALSY) {
                 if (to.getFirstWagon().getClass() == wagon.getClass()) { //Check if wagons are same type of wagon
                     int wagonCounter = wagon.countNextWagons(1);
                     int totalWagons = to.getNumberOfWagons() + wagonCounter;
 
                     if (totalWagons <= to.getEngine().getMaxWagons()) {
-                        Wagon targetWagon = to.getFirstWagon().getLastWagon();
+                        Wagon targetWagon = to.getFirstWagon().getLastWagonAttached();
                         targetWagon.setNextWagon(wagon);
                         to.resetNumberOfWagons();
                         return detachAllFromTrain(from, wagon);
@@ -235,7 +236,7 @@ public class Shunter {
         final int oneWagon = 1;
         if (from != null && to != null && wagon != null) {
             if (from.getFirstWagon().getClass() == wagon.getClass()) {
-                if (from.getPositionOfWagon(wagon.getWagonId()) != falsy) {
+                if (from.getPositionOfWagon(wagon.getWagonId()) != FALSY) {
                     int counter = wagon.countNextWagons(1);
                     if (counter > oneWagon) {
                         detachOneWagon(from, wagon);
@@ -251,7 +252,7 @@ public class Shunter {
                             to.resetNumberOfWagons();
                             return detachOneWagon(from, wagon);
                         }
-                        to.getFirstWagon().getLastWagon().setNextWagon(wagon);
+                        to.getFirstWagon().getLastWagonAttached().setNextWagon(wagon);
                         to.resetNumberOfWagons();
                         return detachOneWagon(from, wagon);
                     }

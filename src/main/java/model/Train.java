@@ -2,6 +2,8 @@ package model;
 
 import java.util.Iterator;
 
+import static model.Shunter.FALSY;
+
 /**
  * Choo Choo ~!
  */
@@ -12,6 +14,11 @@ public class Train implements Iterable<Wagon> {
     private String origin;
     private int numberOfWagons;
 
+    /**
+     * Iterator implementation. Used to 'iterate' the wagons attached to this train.
+     *
+     * @return Wagon
+     */
     @Override
     public Iterator<Wagon> iterator() {
         return new Iterator<Wagon>() {
@@ -19,18 +26,20 @@ public class Train implements Iterable<Wagon> {
 
             @Override
             public boolean hasNext() {
+                //Checks if there is a next element.
                 return currentWagon.hasNextWagon();
             }
 
             @Override
             public Wagon next() {
+                //Returns next element.
                 return currentWagon = currentWagon.getNextWagon();
             }
         };
     }
 
     /**
-     * Default constructor
+     * Default train constructor
      *
      * @param engine      Locomotive
      * @param origin      String
@@ -40,14 +49,6 @@ public class Train implements Iterable<Wagon> {
         this.engine = engine;
         this.destination = destination;
         this.origin = origin;
-    }
-
-    public Wagon getFirstWagon() {
-        return this.firstWagon;
-    }
-
-    public void setFirstWagon(Wagon firstWagon) {
-        this.firstWagon = firstWagon;
     }
 
     /**
@@ -60,24 +61,6 @@ public class Train implements Iterable<Wagon> {
             counter++;
         }
         this.numberOfWagons = counter;
-    }
-
-    public int getNumberOfWagons() {
-        return this.numberOfWagons;
-    }
-
-    public boolean hasNoWagons() {
-        return (this.firstWagon == null);
-    }
-
-    //Used 'getClass()' to check class.
-    public boolean isPassengerTrain() {
-        return firstWagon instanceof PassengerWagon;
-    }
-
-    //Used 'getClass()' to check class.
-    public boolean isFreightTrain() {
-        return firstWagon instanceof FreightWagon;
     }
 
     /**
@@ -106,7 +89,7 @@ public class Train implements Iterable<Wagon> {
                 }
             }
         }
-        return -1;
+        return FALSY;
     }
 
     /**
@@ -141,22 +124,21 @@ public class Train implements Iterable<Wagon> {
         } else {
             throw new IndexOutOfBoundsException("No wagons on train.");
         }
-        return null; //Code never comes here.
+        return null; //Code never comes here, compiler needs a return here.
     }
 
     /**
      * Counts number of seats on the whole train.
      * Sums all seats of al wagons.
-     * <p>
+     *
      * Returns 0 when wagon is not passenger wagon.
      *
      * @return int
      */
     public int getNumberOfSeats() {
-        /* give the total number of seats on a passenger train
-         for freight trains the result should be 0 */
         int numberOfSeats = 0;
         if (this.firstWagon instanceof PassengerWagon) {
+            //Need to cast wagon to a passengerWagon to be able to use its methods.
             PassengerWagon currentWagon = (PassengerWagon) this.firstWagon;
             numberOfSeats = currentWagon.getNumberOfSeats();
 
@@ -195,6 +177,32 @@ public class Train implements Iterable<Wagon> {
 
     public Locomotive getEngine() {
         return engine;
+    }
+
+    public Wagon getFirstWagon() {
+        return this.firstWagon;
+    }
+
+    public void setFirstWagon(Wagon firstWagon) {
+        this.firstWagon = firstWagon;
+    }
+
+    public int getNumberOfWagons() {
+        return this.numberOfWagons;
+    }
+
+    public boolean hasNoWagons() {
+        return (this.firstWagon == null);
+    }
+
+    //Used 'getClass()' to check class.
+    public boolean isPassengerTrain() {
+        return firstWagon instanceof PassengerWagon;
+    }
+
+    //Used 'getClass()' to check class.
+    public boolean isFreightTrain() {
+        return firstWagon instanceof FreightWagon;
     }
 
     @Override

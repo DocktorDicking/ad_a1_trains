@@ -15,11 +15,10 @@ public class TrainLauncher {
         wagonList.add(new PassengerWagon(32, 150));
         wagonList.add(new PassengerWagon(38, 140));
         Locomotive thomas = new Locomotive(2453, 7);
-        Train firstTrain  = new Train(thomas, "Amsterdam", "Haarlem");
+        Train firstTrain = new Train(thomas, "Amsterdam", "Haarlem");
         for (Wagon w : wagonList) {
             Shunter.hookWagonOnTrainRear(firstTrain, w);
         }
-
 
         System.out.println(firstTrain);
         Shunter.hookWagonOnTrainFront(firstTrain, new PassengerWagon(21, 140));
@@ -35,7 +34,7 @@ public class TrainLauncher {
         System.out.println();
         System.out.println("----------------------");
         Locomotive sean = new Locomotive(5277, 8);
-        Train secondTrain = new Train(sean, "Cape Town", "Joburg" );
+        Train secondTrain = new Train(sean, "Cape Town", "Joburg");
 
         Shunter.moveOneWagon(firstTrain, secondTrain, wagonList.get(3));
         System.out.println(firstTrain);

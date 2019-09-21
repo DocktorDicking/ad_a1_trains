@@ -1,36 +1,20 @@
 package model;
 
+/**
+ * Base wagon class. Abstract; cannot be instantiated directly.
+ */
 public abstract class Wagon {
     private int wagonId;
     private Wagon previousWagon;
     private Wagon nextWagon;
 
+    /**
+     * Default wagon constructor. Automatically called by child classes.
+     *
+     * @param wagonId int
+     */
     public Wagon(int wagonId) {
         this.wagonId = wagonId;
-    }
-
-    public Wagon getLastWagonAttached() {
-        return previousWagon;
-    }
-
-    public void setNextWagon(Wagon nextWagon) {
-        this.nextWagon = nextWagon;
-    }
-
-    public Wagon getPreviousWagon() {
-        return previousWagon;
-    }
-
-    public void setPreviousWagon(Wagon previousWagon) {
-        this.previousWagon = previousWagon;
-    }
-
-    public Wagon getNextWagon() {
-        return this.nextWagon;
-    }
-
-    public int getWagonId() {
-        return this.wagonId;
     }
 
     /**
@@ -38,7 +22,7 @@ public abstract class Wagon {
      *
      * @return int
      */
-    public int getNumberOfWagonsAttached() {
+    public int getNumberOfWagonsAttached() { //This method is not used yet. Train haves it's own 'get numer of wagons' method.
         int numberOfWagons = 1;
         //Counts all wagons on the right
         Wagon currentWagon = this;
@@ -58,7 +42,7 @@ public abstract class Wagon {
     /**
      * Method returns the first wagon in the row.
      * Goes to all previous wagons to get to the first wagon.
-     *
+     * <p>
      * Counter is optional, give -1 when counter is not needed.
      *
      * @return Wagon
@@ -74,12 +58,12 @@ public abstract class Wagon {
     /**
      * Method returns the last wagon in the row.
      * Goes to all next wagons to get to the last wagon.
-     *
+     * <p>
      * Counter is optional, give -1 when counter is not needed.
      *
      * @return Wagon
      */
-    public Wagon getLastWagon() {
+    public Wagon getLastWagonAttached() {
         Wagon currentWagon = this;
         while (currentWagon.hasNextWagon()) {
             currentWagon = currentWagon.getNextWagon();
@@ -109,7 +93,7 @@ public abstract class Wagon {
      * @param initialCounter int
      * @return int
      */
-    public int countPreviousWagons(int initialCounter) {
+    public int countPreviousWagons(int initialCounter) { //Not used yet.
         int counter = initialCounter;
         Wagon currentWagon = this;
         while (currentWagon.hasPreviousWagon()) {
@@ -125,6 +109,26 @@ public abstract class Wagon {
 
     public boolean hasPreviousWagon() {
         return !(this.previousWagon == null);
+    }
+
+    public void setNextWagon(Wagon nextWagon) {
+        this.nextWagon = nextWagon;
+    }
+
+    public Wagon getPreviousWagon() {
+        return previousWagon;
+    }
+
+    public void setPreviousWagon(Wagon previousWagon) {
+        this.previousWagon = previousWagon;
+    }
+
+    public Wagon getNextWagon() {
+        return this.nextWagon;
+    }
+
+    public int getWagonId() {
+        return this.wagonId;
     }
 
     @Override
