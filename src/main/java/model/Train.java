@@ -165,9 +165,10 @@ public class Train implements Iterable<Wagon> {
         int maxWeigt = 0;
         if (this.firstWagon instanceof FreightWagon) {
             FreightWagon currentWagon = (FreightWagon) this.firstWagon;
+            maxWeigt = currentWagon.getMaxWeight();
             while (currentWagon.hasNextWagon()) {
-                maxWeigt += currentWagon.getMaxWeight();
                 currentWagon = (FreightWagon) currentWagon.getNextWagon();
+                maxWeigt += currentWagon.getMaxWeight();
             }
         } else if (this.firstWagon instanceof PassengerWagon) {
             return maxWeigt;
