@@ -30,9 +30,12 @@ public class CustomTest {
         Locomotive trainOne = new Locomotive(2453, 11);
 
         freightOne = new Train(trainOne, "Orgrimmar", "Thunderbluff");
+        freightTwo = new Train(trainOne, "Undercity", "Orgrimmar");
         for (Wagon w : list) {
             Shunter.hookWagonOnTrainRear(freightOne, w);
         }
+        FreightWagon wagon = new FreightWagon(100,100);
+        Shunter.hookWagonOnTrainRear(freightTwo, wagon);
     }
 
     @Test
@@ -47,10 +50,31 @@ public class CustomTest {
         Method method = Shunter.class.getDeclaredMethod("isSuitableWagon", Train.class, Wagon.class);
         method.setAccessible(true);
         FreightWagon wagon = new FreightWagon(22, 22);
-        boolean output = (boolean) method.invoke(Shunter.class, freightOne,wagon);
+        PassengerWagon passengerWagon =  new PassengerWagon(22,22);
 
-        assertNotNull(output);
+        boolean output = (boolean) method.invoke(Shunter.class, freightOne,wagon);
+        boolean outputP = (boolean) method.invoke(Shunter.class, freightOne, passengerWagon);
+
         assertTrue(output);
+        assertFalse(outputP);
     }
+
+    @Test
+    public void hasPlaceForWagons() throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+        //Using reflection to gain access to private method outside of its class.
+        Method method = Shunter.class.getDeclaredMethod("hasPlaceForWagons", Train.class, Wagon.class);
+        method.setAccessible(true);
+        FreightWagon freightWagon = new FreightWagon(22, 22);
+        PassengerWagon passengerWagon =  new PassengerWagon(22,22);
+
+        boolean output = (boolean) method.invoke(Shunter.class, freightOne,freightWagon);
+        boolean output2 = (boolean) method.invoke(Shunter.class, freightTwo,freightWagon);
+        assertTrue(output);
+        assertTrue(output2);
+    }
+
+
+
+
 
 }
